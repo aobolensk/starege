@@ -2,9 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"log"
-	"net/http"
+	"starege/server"
 )
 
 type Args struct {
@@ -24,11 +22,5 @@ func parseArgs() Args {
 
 func main() {
 	args := parseArgs()
-	if args.serveDir != "" {
-		files := http.StripPrefix("/"+args.rootUrl+"/data/", http.FileServer(http.Dir(args.serveDir)))
-		http.Handle("/"+args.rootUrl+"/data/", files)
-	}
-	ipPort := fmt.Sprintf(":%d", args.port)
-	log.Printf("Listening and serving starege on %s", ipPort)
-	log.Fatal(http.ListenAndServe(ipPort, nil))
+	server.Serve("", args.port, args.rootUrl, args.serveDir)
 }
